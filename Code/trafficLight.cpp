@@ -2,7 +2,6 @@
 /// NOTE On Desktop systems, compile with -D NO_PI flag
 //
 
-#define NO_PI
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -30,7 +29,9 @@ void init()
 {
 #ifndef NO_PI
     wiringPiSetup();
-    pinMode(led_Blue, OUTPUT);
+    pinMode(led_Red, OUTPUT);
+    pinMode(led_Green, OUTPUT);
+    pinMode(led_Yellow, OUTPUT);
 #endif
 }
 
@@ -38,6 +39,7 @@ void setLed(int ledNumber, bool value)
 {
 #ifndef NO_PI
     digitalWrite(ledNumber, value);
+    
 #else
     cout << "Setting led " << ledNumber << " to " << (value ? "ON" : "OFF") << endl;
 #endif
@@ -52,15 +54,17 @@ void counter(int time, int led){
             setLed(led, true);
             setLed(led_Green,true);
             count++;
+            
+            
+        #ifndef NO_PI
+            delay(timeoutMs);
+        #else
+            Sleep(timeoutMs / 1000);
+        #endif
         }
         setLed(led,false);
         setLed(led_Green,false);
 
-    #ifndef NO_PI
-        delay(timeoutMs);
-    #else
-        Sleep(timeoutMs / 1000);
-    #endif
 
 
     } else {
@@ -69,22 +73,23 @@ void counter(int time, int led){
             //*cout << " N " << time <<endl;
             setLed(led, true);
             count++;
+        #ifndef NO_PI
+                delay(timeoutMs);
+        #else
+                Sleep(timeoutMs / 1000);
+        #endif
         }
         setLed(led, false);
-    #ifndef NO_PI
-            delay(timeoutMs);
-    #else
-            Sleep(timeoutMs / 1000);
-    #endif
+   
     }
 }
 
 void normalCycle(){
 
     //int count = 0;
-    int time1 = 100;
-    int time2 = 100;
-    int time3 = 50;
+    int time1 = 10;
+    int time2 = 10;
+    int time3 = 5;
     while(1)
     {
         counter(time1,led_Red);
