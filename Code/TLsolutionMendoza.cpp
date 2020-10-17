@@ -49,7 +49,7 @@ void setLed(int ledNumber, bool value)
 void blinkingYellow(){
     bool onoff = true;
     int count = 0;
-    while(count < 5){
+    while(count <= 5){
         setLed(led_Yellow,onoff);
         onoff = !onoff;
         delay(100);
@@ -83,7 +83,7 @@ void normalCycle(){
         cout << "CurrentState: S"<< currentState << endl;
 
         //FAKE ERROR
-        if(errorCounter == 10){
+        if(errorCounter == 2){
             cout << "Unexpected Error" << endl;
             blinkingYellow();
             break;
