@@ -2,7 +2,7 @@
 /// NOTE On Desktop systems, compile with -D NO_PI flag
 //
 
-#define NO_PI
+//#define NO_PI
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -52,56 +52,31 @@ void blinkingYellow(){
     while(count < 5){
         setLed(led_Yellow,onoff);
         onoff = !onoff;
-        Sleep(1);
+        delay(100);
         count++;
     }
 }
 
-void counter(int time, int led){
-    int count = 0;
+void setOnOff(int time, int led){
+    setLed(led, true);
 
-    if(led == led_Yellow){
-        while(count < time){
-            //*cout << " N " << time <<endl;
-            setLed(led, true);
-            setLed(led_Green,true);
-            count++;
+    #ifndef NO_PI
+        delay(time*1000);
+    #else
+        Sleep(time*1000);
+    #endif
 
-#ifndef NO_PI
-            delay(timeoutMs);
-#else
-            Sleep(timeoutMs / 1000);
-#endif
-        }
-        setLed(led,false);
-        setLed(led_Green,false);
+    setLed(led, false);
 
-    } else {
-
-        while (count < time) {
-            //*cout << " N " << time <<endl;
-            setLed(led, true);
-            count++;
-#ifndef NO_PI
-            delay(timeoutMs);
-#else
-            Sleep(timeoutMs);
-#endif
-        }
-        setLed(led, false);
-
-    }
 }
 
 void normalCycle(){
 
+    int currentState = 0;
     int errorCounter = 0;
     int time1 = 10;
-    int time2 = 10;
+    int time2 = 15;
     int time3 = 5;
-    int count = 0;
-
-    int currentState = 0;
 
     while(1)
     {
@@ -114,21 +89,18 @@ void normalCycle(){
             break;
         }
 
-        if(count < time1 && currentState == 0){
-            counter(time1,led_Red);
+        if(currentState == 0){
+            setOnOff(time1,led_Red);
             currentState = 2;
             errorCounter++;
-            count = 0;
-        } else if(count < time2 && currentState == 2){
-            counter(time2,led_Green);
+        } else if(currentState == 2){
+            setOnOff(time2,led_Green);
             currentState = 1;
-            count = 0;
-        } else if(count < time3 && currentState == 1){
-            counter(time3,led_Yellow);
+        } else{
+            setOnOff(time3,led_Yellow);
             currentState = 0;
-            count = 0;
+
         }
-        count++;
 
     }
 }
